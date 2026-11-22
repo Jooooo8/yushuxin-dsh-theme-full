@@ -1,0 +1,6 @@
+# only local noise; artwork and generated bundles ARE committed in this full repo
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+node_modules/

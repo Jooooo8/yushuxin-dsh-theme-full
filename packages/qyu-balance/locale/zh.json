@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "欣宝余额服务",
+    "description": "为 Q 版欣宝挂件提供 DeepSeek 余额查询的 Host 侧路由，API Key 不会离开宿主进程。"
+  }
+}

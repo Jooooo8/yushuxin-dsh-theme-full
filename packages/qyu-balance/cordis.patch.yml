@@ -1,0 +1,3 @@
+- insert:
+    - id: qyu-balance
+      name: '@local/qyu-balance'

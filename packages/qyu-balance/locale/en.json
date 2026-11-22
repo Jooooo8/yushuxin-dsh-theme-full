@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Xinbao Balance Service",
+    "description": "Host-side DeepSeek balance endpoint for the Q-version companion widget. The API key never leaves the Host process."
+  }
+}
