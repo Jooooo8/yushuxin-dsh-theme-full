@@ -1,4 +1,4 @@
-# 虞书欣主题 · DSH 外观插件集（完整版）
+# 虞书欣主题 · DSH 外观插件集（完整版）1218
 
 一套 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web 界面外观插件：玫瑰粉主题、可循环滑动的 107 张照片胶片、右下角 Q 版欣宝挂件（设置菜单 + DeepSeek 余额显示），以及「小石榴」粉丝元素。
 
