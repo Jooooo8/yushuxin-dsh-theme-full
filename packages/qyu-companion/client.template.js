@@ -5,6 +5,8 @@ window.__ModuleLoader__.load({
     const h = React.createElement;
 
     const CHAR = '__CHAR__';
+    const CLOSED = '__CLOSED__';
+    const HALF = '__HALF__';
     const AUDIO = ['__AUDIO1__', '__AUDIO2__'];
     const NS = 'qyu-companion';
 
@@ -221,6 +223,7 @@ window.__ModuleLoader__.load({
       const [drag, setDrag] = React.useState(false);
       const [soundOn, setSoundOn] = React.useState(false);
       const [cardOpen, setCardOpen] = React.useState(false);
+      const [eyes, setEyes] = React.useState('open');
       const [balance, setBalance] = React.useState({ state: 'idle' });
       const [used, setUsed] = React.useState(0);
 
@@ -233,7 +236,20 @@ window.__ModuleLoader__.load({
       const idx = React.useRef(-1);
       const timer = React.useRef(null);
       const longTimer = React.useRef(null);
+      const blinkTimers = React.useRef([]);
       const warned = React.useRef(false);
+
+      function clearBlinks() {
+        blinkTimers.current.forEach(clearTimeout);
+        blinkTimers.current = [];
+      }
+      function blink(ms) {
+        if (CLOSED === HALF) return;
+        clearBlinks();
+        blinkTimers.current.push(setTimeout(function () { setEyes('half'); }, 0));
+        blinkTimers.current.push(setTimeout(function () { setEyes('closed'); }, 90));
+        blinkTimers.current.push(setTimeout(function () { setEyes('open'); }, ms || 330));
+      }
 
       function say(text) {
         if (!settingsRef.current.bubbleOn) return;
@@ -358,6 +374,16 @@ window.__ModuleLoader__.load({
 
       React.useEffect(function () {
         const hello = settingsRef.current.greetOn ? setTimeout(next, 1500) : null;
+        let blinkLoop = null;
+        if (CLOSED !== HALF) {
+          const schedule = function () {
+            blinkLoop = setTimeout(function () {
+              blink();
+              schedule();
+            }, 3000 + Math.random() * 5000);
+          };
+          schedule();
+        }
         function onResize() {
           setPos(function (p) {
             const c = clampPos(p);
@@ -368,6 +394,8 @@ window.__ModuleLoader__.load({
         window.addEventListener('resize', onResize);
         return function () {
           if (hello) clearTimeout(hello);
+          if (blinkLoop) clearTimeout(blinkLoop);
+          clearBlinks();
           window.removeEventListener('resize', onResize);
           if (timer.current) clearTimeout(timer.current);
           if (longTimer.current) clearTimeout(longTimer.current);
@@ -447,7 +475,7 @@ window.__ModuleLoader__.load({
         setDrag(false);
         if (!s) return;
         try { localStorage.setItem('qyu-companion-pos', JSON.stringify(posRef.current)); } catch (err) {}
-        if (!s.moved && !s.longFired) { next(); playSound(); }
+        if (!s.moved && !s.longFired) { next(); playSound(); blink(620); }
       }
 
       function onContext(e) {
@@ -569,7 +597,12 @@ window.__ModuleLoader__.load({
               tabIndex: 0,
               'aria-label': t('aria.character')
             },
-            h('img', { src: CHAR, alt: '', draggable: false }),
+            h('img', {
+              src: eyes === 'closed' ? CLOSED : eyes === 'half' ? HALF : CHAR,
+              alt: '',
+              draggable: false,
+              key: eyes
+            }),
             soundOn && h('span', { className: 'qyu-note', 'aria-hidden': 'true' }, '\u266a'),
             h('span', { className: 'qyu-star s1', 'aria-hidden': 'true' }, '\u2726'),
             h('span', { className: 'qyu-star s2', 'aria-hidden': 'true' }, '\u2726'),
