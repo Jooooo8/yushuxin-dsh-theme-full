@@ -230,6 +230,7 @@ window.__ModuleLoader__.load({
       const posRef = React.useRef(pos);
       const settingsRef = React.useRef(settings);
       settingsRef.current = settings;
+      const menuStart = React.useRef(null);
       const audios = React.useRef(null);
       const lastAudio = React.useRef(-1);
       const start = React.useRef(null);
@@ -412,8 +413,16 @@ window.__ModuleLoader__.load({
       }, [settings.balanceOn, settings.balanceRefresh]);
 
       function openMenu() {
+        menuStart.current = Object.assign({}, settingsRef.current);
         setDraft(Object.assign({}, settingsRef.current));
         setMenuOpen(true);
+      }
+      function cancelMenu() {
+        if (menuStart.current) {
+          setSettings(menuStart.current);
+          settingsRef.current = menuStart.current;
+        }
+        setMenuOpen(false);
       }
       function saveSettings() {
         setSettings(draft);
@@ -542,7 +551,13 @@ window.__ModuleLoader__.load({
             Row(t('field.greetOn'), h(Tog, { value: draft.greetOn, label: t('field.greetOn'), onChange: function (v) { patchDraft('greetOn', v); } })),
 
             Sec(t('menu.look')),
-            Row(t('field.size') + ' ' + draft.size + 'px', slider(draft.size, 90, 200, function (v) { patchDraft('size', v); })),
+            Row(
+              t('field.size') + ' ' + draft.size + 'px',
+              slider(draft.size, 90, 200, function (v) {
+                patchDraft('size', v);
+                setSettings(function (s) { return Object.assign({}, s, { size: v }); });
+              })
+            ),
 
             Sec(t('menu.position')),
             Row('', h('button', { type: 'button', className: 'qyu-btn', onClick: resetPos }, t('menu.reset'))),
@@ -550,8 +565,11 @@ window.__ModuleLoader__.load({
             h(
               'div',
               { className: 'qyu-foot' },
-              h('button', { type: 'button', className: 'qyu-btn', onClick: function () { setMenuOpen(false); } }, t('menu.cancel')),
-              h('button', { type: 'button', className: 'qyu-btn', onClick: function () { setDraft(Object.assign({}, DEFAULTS)); } }, t('menu.defaults')),
+              h('button', { type: 'button', className: 'qyu-btn', onClick: cancelMenu }, t('menu.cancel')),
+              h('button', { type: 'button', className: 'qyu-btn', onClick: function () {
+                setDraft(Object.assign({}, DEFAULTS));
+                setSettings(Object.assign({}, DEFAULTS));
+              } }, t('menu.defaults')),
               h('button', { type: 'button', className: 'qyu-btn primary', onClick: saveSettings }, t('menu.save'))
             )
           )
