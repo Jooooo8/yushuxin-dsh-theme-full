@@ -11,6 +11,7 @@ embedded as data:audio/mp4;base64 and decoded by the browser.
 """
 import base64
 import io
+import json
 import sys
 from pathlib import Path
 
@@ -102,15 +103,16 @@ template = (HERE / "client.template.js").read_text(encoding="utf-8")
 template = template.replace("__CHAR__", open_uri)
 template = template.replace("__CLOSED__", closed_uri)
 template = template.replace("__HALF__", half_uri)
-for n, path in enumerate(audio_paths[:2], start=1):
+audio_uris = []
+for path in audio_paths:
     raw = path.read_bytes()
-    uri = "data:audio/mp4;base64," + base64.b64encode(raw).decode("ascii")
-    template = template.replace("__AUDIO%d__" % n, uri)
+    audio_uris.append("data:audio/mp4;base64," + base64.b64encode(raw).decode("ascii"))
+template = template.replace("__AUDIO__", json.dumps(audio_uris, ensure_ascii=False))
 
 out = HERE / "client.js"
 out.write_text(template, encoding="utf-8")
 print("open:", open_path.name)
 print("closed:", closed_path.name if closed_path else "fallback")
 print("half:", half_path.name if half_path else "fallback")
-print("audio:", [p.name for p in audio_paths[:2]])
+print("audio:", [p.name for p in audio_paths])
 print("wrote", out, out.stat().st_size, "bytes")

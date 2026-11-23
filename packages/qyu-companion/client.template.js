@@ -7,7 +7,7 @@ window.__ModuleLoader__.load({
     const CHAR = '__CHAR__';
     const CLOSED = '__CLOSED__';
     const HALF = '__HALF__';
-    const AUDIO = ['__AUDIO1__', '__AUDIO2__'];
+    const AUDIO = __AUDIO__;
     const NS = 'qyu-companion';
 
     const KEYS = [
