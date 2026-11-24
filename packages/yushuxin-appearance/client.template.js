@@ -33,7 +33,27 @@ window.__ModuleLoader__.load({
       'prev': '上一张',
       'next': '下一张',
       'caption': '小石榴 ♥ 虞书欣',
-      'swipe': '松开放大'
+      'swipe': '松开放大',
+      'profile.hint': '点击查看虞书欣简介',
+      'profile.section': '个人资料',
+      'profile.name': '虞书欣',
+      'profile.en': 'Esther Yu',
+      'profile.tagline': '小石榴 · 石榴红',
+      'profile.birth': '1995.12.18 · 上海',
+      'profile.job': '演员 / 歌手 / 舞者',
+      'profile.group': 'THE9 成员（2020–2021）',
+      'profile.kBirth': '出生',
+      'profile.kJob': '职业',
+      'profile.kGroup': '团体',
+      'profile.works': '代表角色',
+      'profile.w1': '《下一站是幸福》 蔡敏敏',
+      'profile.w2': '《苍兰诀》 小兰花',
+      'profile.w3': '《永夜星河》 凌妙妙',
+      'profile.w4': '《月光变奏曲》 初礼',
+      'profile.w5': '《少主且慢行》 田三七',
+      'profile.quote': '像石榴籽一样抱团升温 ✨',
+      'profile.source': '资料来源',
+      'profile.note': '资料仅供参考'
     };
     const en = {
       'title': 'Yu Shuxin · Film',
@@ -45,7 +65,27 @@ window.__ModuleLoader__.load({
       'prev': 'Previous',
       'next': 'Next',
       'caption': 'Little Pomegranates ♥ Yu Shuxin',
-      'swipe': 'Release to enlarge'
+      'swipe': 'Release to enlarge',
+      'profile.hint': 'Click to view Yu Shuxin profile',
+      'profile.section': 'Profile',
+      'profile.name': 'Yu Shuxin',
+      'profile.en': 'Esther Yu',
+      'profile.tagline': 'Little Pomegranates · Pomegranate Red',
+      'profile.birth': '1995.12.18 · Shanghai',
+      'profile.job': 'Actress / Singer / Dancer',
+      'profile.group': 'THE9 member (2020–2021)',
+      'profile.kBirth': 'Born',
+      'profile.kJob': 'Career',
+      'profile.kGroup': 'Group',
+      'profile.works': 'Notable roles',
+      'profile.w1': '《下一站是幸福》 Cai Minmin',
+      'profile.w2': '《苍兰诀》 Xiao Lanhua',
+      'profile.w3': '《永夜星河》 Ling Miaomiao',
+      'profile.w4': '《月光变奏曲》 Chu Li',
+      'profile.w5': '《少主且慢行》 Tian Sanqi',
+      'profile.quote': 'Clustering close like pomegranate seeds ✨',
+      'profile.source': 'Sources',
+      'profile.note': 'For reference only'
     };
 
     const CSS = `
@@ -98,7 +138,9 @@ window.__ModuleLoader__.load({
 .ysx-fall{position:absolute;top:-8vh;animation:ysx-fall linear infinite;opacity:0;text-shadow:0 1px 4px rgba(217,79,112,.25)}
 .ysx-charm{display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 5px;border-radius:999px;background:linear-gradient(135deg,rgba(217,79,112,.14),rgba(232,107,140,.2));border:.5px solid var(--dsw-alias-border-l1,#f3dbe7);color:#d94f70;font-size:11px;letter-spacing:1px;cursor:default;transition:transform .25s ease}
 .ysx-charm:hover{transform:rotate(-3deg) scale(1.06)}
-.ysx-sess{display:inline-flex;align-items:center;gap:6px;cursor:default}
+.ysx-sess{display:inline-flex;align-items:center;gap:6px;cursor:pointer;transition:transform .2s ease}
+.ysx-sess:hover{transform:scale(1.06)}
+.ysx-sess:focus-visible{outline:2px solid #d94f70;outline-offset:3px;border-radius:999px}
 .ysx-ava{width:24px;height:24px;border-radius:50%;background-size:cover;background-position:center 25%;border:2px solid #d94f70;box-shadow:0 0 0 2px rgba(217,79,112,.2);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
 .ysx-sess:hover .ysx-ava{transform:rotate(8deg) scale(1.15)}
 .ysx-sess-heart{color:#e35d8c;font-size:12px;animation:ysx-beat 1.9s ease-in-out infinite}
@@ -106,6 +148,28 @@ window.__ModuleLoader__.load({
 .ysx-hero-ph{width:72px;height:72px;border-radius:50%;background-size:cover;background-position:center 25%;border:3px solid #f0a8c4;box-shadow:0 0 0 4px rgba(217,79,112,.18),0 8px 24px rgba(217,79,112,.3)}
 .ysx-hero-pome{position:absolute;right:-6px;bottom:-4px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));animation:ysx-sway 4.5s ease-in-out infinite}
 .ysx-hero-star{position:absolute;left:-8px;top:-4px;color:#ffbe3d;font-size:15px;animation:ysx-twinkle 2.6s ease-in-out infinite}
+.ysx-pf-backdrop{position:fixed;inset:0;z-index:2147483500;background:rgba(32,12,24,.55);backdrop-filter:blur(6px);animation:ysx-fade .18s ease-out}
+.ysx-pf-card{position:fixed;z-index:2147483510;left:50%;top:50%;transform:translate(-50%,-50%);width:min(348px,90vw);max-height:84vh;overflow-y:auto;box-sizing:border-box;padding:18px 20px 16px;border-radius:20px;background:var(--dsw-alias-bg-overlay,#fff);border:1px solid var(--dsw-alias-border-l2,#f0c9da);box-shadow:0 24px 70px rgba(60,10,35,.4);color:var(--dsw-alias-label-primary,#3a2230);animation:ysx-pf-in .32s cubic-bezier(.34,1.56,.64,1);font-family:var(--dsw-font-family,inherit)}
+.ysx-pf-close{position:absolute;top:10px;right:12px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(217,79,112,.12);color:#d94f70;font-size:16px;line-height:24px;cursor:pointer;padding:0}
+.ysx-pf-close:hover{background:rgba(217,79,112,.3)}
+.ysx-pf-top{display:flex;align-items:center;gap:14px}
+.ysx-pf-ava{width:76px;height:76px;border-radius:50%;flex:none;background-size:cover;background-position:center 25%;border:3px solid #d94f70;box-shadow:0 0 0 4px rgba(217,79,112,.16);animation:ysx-herofloat 4s ease-in-out infinite}
+.ysx-pf-name{font-size:19px;font-weight:700;color:#d94f70;letter-spacing:1px;line-height:1.3}
+.ysx-pf-en{font-size:11px;opacity:.7;letter-spacing:1px;margin-top:2px}
+.ysx-pf-tag{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:3px 10px;border-radius:999px;background:linear-gradient(135deg,#d94f70,#e86b8c);color:#fff;font-size:10px;letter-spacing:.5px}
+.ysx-pf-sec{font-size:10px;letter-spacing:1.5px;color:#d94f70;font-weight:700;margin:14px 0 7px;border-top:1px solid var(--dsw-alias-border-l1,#f3dbe7);padding-top:11px}
+.ysx-pf-row{display:flex;gap:8px;font-size:12px;line-height:1.75}
+.ysx-pf-key{width:38px;flex:none;opacity:.6}
+.ysx-pf-works{display:flex;flex-wrap:wrap;gap:6px}
+.ysx-pf-chip{padding:3px 9px;border-radius:999px;background:rgba(217,79,112,.09);border:.5px solid var(--dsw-alias-border-l1,#f3dbe7);font-size:11px;line-height:1.5}
+.ysx-pf-quote{margin-top:14px;text-align:center;font-size:12px;color:#d94f70;letter-spacing:.5px}
+.ysx-pf-src{margin-top:12px;font-size:10px;opacity:.68;line-height:1.7}
+.ysx-pf-src a{color:#d94f70;text-decoration:none}
+.ysx-pf-src a:hover{text-decoration:underline}
+.ysx-pf-spark{position:absolute;pointer-events:none;color:#ffbe3d;animation:ysx-twinkle 2.6s ease-in-out infinite}
+.ysx-pf-spark.a{left:14px;top:12px;font-size:13px}
+.ysx-pf-spark.b{right:44px;bottom:14px;font-size:11px;animation-delay:.8s;color:#e86b8c}
+@keyframes ysx-pf-in{from{opacity:0;transform:translate(-50%,-46%) scale(.86)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @keyframes ysx-fall{0%{opacity:0;transform:translate3d(0,-6vh,0) rotate(0deg)}8%{opacity:.55}85%{opacity:.4}100%{opacity:0;transform:translate3d(var(--sway),108vh,0) rotate(320deg)}}
 @keyframes ysx-herofloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes ysx-twinkle{0%,100%{opacity:.3;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(25deg)}}`;
@@ -356,7 +420,6 @@ window.__ModuleLoader__.load({
       return h(
         React.Fragment,
         null,
-        h('style', null, CSS),
         h(
           'div',
           { className: 'ysx-wrap' },
@@ -459,6 +522,7 @@ window.__ModuleLoader__.load({
       return h(
         'div',
         { className: 'ysx-ambient', 'aria-hidden': 'true' },
+        h('style', null, CSS),
         h('div', { className: 'ysx-glow a' }),
         h('div', { className: 'ysx-glow b' }),
         seeds.map(function (s, i) {
@@ -478,6 +542,91 @@ window.__ModuleLoader__.load({
       );
     }
 
+    // Shared state between the header charm (session scope) and the profile
+    // modal (root overlay scope), which are two separate slot occupants.
+    const profileStore = {
+      open: false,
+      listeners: new Set(),
+      subscribe(fn) {
+        this.listeners.add(fn);
+        return () => this.listeners.delete(fn);
+      },
+      set(value) {
+        this.open = value;
+        this.listeners.forEach(function (fn) { fn(value); });
+      }
+    };
+
+    function ProfileModal() {
+      const [open, setOpen] = React.useState(profileStore.open);
+      React.useEffect(function () { return profileStore.subscribe(setOpen); }, []);
+      React.useEffect(function () {
+        if (!open) return;
+        function onKey(e) { if (e.key === 'Escape') profileStore.set(false); }
+        window.addEventListener('keydown', onKey);
+        return function () { window.removeEventListener('keydown', onKey); };
+      }, [open]);
+      if (!open) return null;
+
+      const works = ['profile.w1', 'profile.w2', 'profile.w3', 'profile.w4', 'profile.w5'];
+      function row(label, value) {
+        return h('div', { className: 'ysx-pf-row' },
+          h('span', { className: 'ysx-pf-key' }, t(label)),
+          h('span', null, value));
+      }
+      return h(
+        React.Fragment,
+        null,
+        h('div', { className: 'ysx-pf-backdrop', onClick: function () { profileStore.set(false); } }),
+        h(
+          'div',
+          {
+            className: 'ysx-pf-card',
+            role: 'dialog',
+            'aria-modal': 'true',
+            'aria-label': t('profile.hint')
+          },
+          h('button', {
+            type: 'button',
+            className: 'ysx-pf-close',
+            'aria-label': t('close'),
+            onClick: function () { profileStore.set(false); }
+          }, '\u00d7'),
+          h('span', { className: 'ysx-pf-spark a', 'aria-hidden': 'true' }, '\u2726'),
+          h('span', { className: 'ysx-pf-spark b', 'aria-hidden': 'true' }, '\u2665'),
+          h(
+            'div',
+            { className: 'ysx-pf-top' },
+            h('span', { className: 'ysx-pf-ava', style: { backgroundImage: 'url("' + HERO + '")' } }),
+            h(
+              'div',
+              null,
+              h('div', { className: 'ysx-pf-name' }, t('profile.name')),
+              h('div', { className: 'ysx-pf-en' }, t('profile.en')),
+              h('div', { className: 'ysx-pf-tag' }, h(Pomegranate, { size: 12 }), t('profile.tagline'))
+            )
+          ),
+          h('div', { className: 'ysx-pf-sec' }, t('profile.section')),
+          row('profile.kBirth', t('profile.birth')),
+          row('profile.kJob', t('profile.job')),
+          row('profile.kGroup', t('profile.group')),
+          h('div', { className: 'ysx-pf-sec' }, t('profile.works')),
+          h('div', { className: 'ysx-pf-works' },
+            works.map(function (key) {
+              return h('span', { className: 'ysx-pf-chip', key: key }, t(key));
+            })),
+          h('div', { className: 'ysx-pf-quote' }, t('profile.quote')),
+          h('div', { className: 'ysx-pf-src' },
+            t('profile.source') + ' · ',
+            h('a', { href: 'https://zh.wikipedia.org/zh-hans/%E8%99%9E%E6%9B%B8%E6%AC%A3', target: '_blank', rel: 'noopener noreferrer' }, 'Wikipedia'),
+            ' · ',
+            h('a', { href: 'https://baike.baidu.com/item/%E8%99%9E%E4%B9%A6%E6%AC%A3/2977841', target: '_blank', rel: 'noopener noreferrer' }, 'Baidu Baike'),
+            h('div', null, t('profile.note'))
+          )
+        )
+      );
+    }
+
     function HeaderCharm() {
       return h(
         'span',
@@ -491,7 +640,20 @@ window.__ModuleLoader__.load({
     function SessionCharm() {
       return h(
         'span',
-        { className: 'ysx-sess', title: t('caption') },
+        {
+          className: 'ysx-sess',
+          role: 'button',
+          tabIndex: 0,
+          title: t('profile.hint'),
+          'aria-label': t('profile.hint'),
+          onClick: function () { profileStore.set(true); },
+          onKeyDown: function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              profileStore.set(true);
+            }
+          }
+        },
         h('span', { className: 'ysx-ava', style: { backgroundImage: 'url("' + AVATAR + '")' } }),
         h('span', { className: 'ysx-sess-heart', 'aria-hidden': 'true' }, '\u2665')
       );
@@ -525,6 +687,9 @@ window.__ModuleLoader__.load({
         );
         ctx.slots.inject('shell.overlay', () =>
           ctx.slots.register({ name: 'shell.overlay', id: 'yushuxin-ambient', order: 0 }, Ambient)
+        );
+        ctx.slots.inject('shell.overlay', () =>
+          ctx.slots.register({ name: 'shell.overlay', id: 'yushuxin-profile', order: 1 }, ProfileModal)
         );
         ctx.slots.inject('conversation.header.leading', () =>
           ctx.slots.register({ name: 'conversation.header.leading', id: 'yushuxin-header-charm' }, HeaderCharm)
