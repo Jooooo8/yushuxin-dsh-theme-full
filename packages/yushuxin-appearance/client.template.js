@@ -58,7 +58,7 @@ window.__ModuleLoader__.load({
 .ysx-mute{border:none;background:transparent;cursor:pointer;font-size:12px;line-height:1;padding:0 2px;opacity:.8}
 .ysx-mute:hover{opacity:1;transform:scale(1.15)}
 .ysx-film{position:relative;border-radius:12px;background:linear-gradient(180deg,#36262f,#241a21);border:.5px solid #d9a9c2;box-shadow:0 4px 16px rgba(120,40,80,.22);overflow:hidden}
-.ysx-track{display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;padding:20px 10px;scrollbar-width:none;cursor:grab;touch-action:pan-y}
+.ysx-track{display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;padding:20px 10px;scrollbar-width:none;cursor:grab;touch-action:none}
 .ysx-track::-webkit-scrollbar{display:none}
 .ysx-track.ysx-dragging{cursor:grabbing;user-select:none}
 .ysx-cell{flex:none;width:76px;display:flex;flex-direction:column;align-items:center;gap:3px}
@@ -276,7 +276,12 @@ window.__ModuleLoader__.load({
         const el = track.current;
         if (!el || (e.pointerType === 'mouse' && e.button !== 0)) return;
         ensureAudio();
-        const shot = e.target && e.target.closest ? e.target.closest('[data-shot]') : null;
+        // Accept a press anywhere in the film cell, not only on the image pixel.
+        let shot = e.target && e.target.closest ? e.target.closest('[data-shot]') : null;
+        if (!shot && e.target && e.target.closest) {
+          const cell = e.target.closest('.ysx-cell');
+          if (cell) shot = cell.querySelector('[data-shot]');
+        }
         drag.current = {
           x: e.clientX,
           y: e.clientY,
@@ -293,16 +298,21 @@ window.__ModuleLoader__.load({
         if (!d || !el) return;
         const dx = e.clientX - d.x;
         const dy = e.clientY - d.y;
-        if (!d.moved) {
-          // Drag a photo upward -> the same "enlarge" follow-up as a click.
-          if (d.shot >= 0 && dy < -24 && Math.abs(dy) > Math.abs(dx) * 1.1) {
-            d.moved = true;
-            d.swipeUp = true;
-            setSwiping(true);
-          } else if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-            d.moved = true;
-            setDragging(true);
-          }
+        const ax = Math.abs(dx);
+        const ay = Math.abs(dy);
+
+        // Swipe-up is checked on EVERY move, not only the first one. A tiny
+        // initial wobble must not lock the gesture into "horizontal drag".
+        if (!d.swipeUp && d.shot >= 0 && dy < -18 && ay > ax * 1.2) {
+          d.swipeUp = true;
+          d.moved = true;
+          setDragging(false);
+          setSwiping(true);
+          el.scrollLeft = d.left; // undo any horizontal scroll from the wobble
+        }
+        if (!d.moved && (ax > 5 || ay > 5)) {
+          d.moved = true;
+          if (!d.swipeUp) setDragging(true);
         }
         if (d.moved && !d.swipeUp) el.scrollLeft = d.left - dx;
       }
